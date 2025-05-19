@@ -1,18 +1,29 @@
 "use client"
 
-import dynamic from "next/dynamic"
-import { Suspense } from "react"
-
-// Dynamically import the component with no SSR
-const BlogsContent = dynamic(() => import("@/components/blogs-content"), {
-  ssr: false,
-  loading: () => <div className="mt-16 text-center">Loading blog posts...</div>,
-})
+import { useEffect, useState } from "react"
+import { PageTransition } from "@/components/page-transition"
+import { MaintenanceOverlay } from "@/components/maintenance-overlay"
+import BlogsContent from "./content"
 
 export default function BlogsClient() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    // Replace the static content with the client component
+    const contentElement = document.getElementById("blogs-content")
+    if (contentElement) {
+      setIsMounted(true)
+    }
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
+
   return (
-    <Suspense fallback={<div className="mt-16 text-center">Loading blog posts...</div>}>
+    <PageTransition>
+      <MaintenanceOverlay />
       <BlogsContent />
-    </Suspense>
+    </PageTransition>
   )
 }

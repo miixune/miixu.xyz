@@ -1,18 +1,30 @@
 "use client"
 
-import dynamic from "next/dynamic"
-import { Suspense } from "react"
-
-// Dynamically import the component with no SSR
-const AdminProjectsContent = dynamic(() => import("@/components/admin-projects-content"), {
-  ssr: false,
-  loading: () => <div className="mt-12 text-center">Loading project management...</div>,
-})
+import { useEffect, useState } from "react"
+import { ProtectedRouteClient } from "@/components/protected-route-client"
+import { PageTransition } from "@/components/page-transition"
+import AdminProjectsContent from "./content"
 
 export default function AdminProjectsClient() {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    // Replace the static content with the client component
+    const contentElement = document.getElementById("admin-projects-content")
+    if (contentElement) {
+      setIsMounted(true)
+    }
+  }, [])
+
+  if (!isMounted) {
+    return null
+  }
+
   return (
-    <Suspense fallback={<div className="mt-12 text-center">Loading project management...</div>}>
-      <AdminProjectsContent />
-    </Suspense>
+    <ProtectedRouteClient>
+      <PageTransition>
+        <AdminProjectsContent />
+      </PageTransition>
+    </ProtectedRouteClient>
   )
 }

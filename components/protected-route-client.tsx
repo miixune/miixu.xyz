@@ -7,11 +7,10 @@ import { Loader2 } from "lucide-react"
 import { LoginForm } from "@/components/login-form"
 import { Card, CardHeader, CardTitle } from "@/components/ui/card"
 
-export function ProtectedRoute({ children }: { children: React.ReactNode }) {
+export function ProtectedRouteClient({ children }: { children: React.ReactNode }) {
   const { user, loading, isAdmin } = useAuth()
   const [mounted, setMounted] = useState(false)
 
-  // Use window.location instead of useRouter/usePathname
   useEffect(() => {
     setMounted(true)
     if (!loading && !user && mounted) {
@@ -50,6 +49,5 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     )
   }
 
-  // This is now just a placeholder that will be replaced by the client component
   return <>{children}</>
 }
