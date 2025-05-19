@@ -2,14 +2,14 @@ import type React from "react"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Navigation } from "@/components/navigation"
-import { Analytics } from "@/components/analytics"
 import { Footer } from "@/components/footer"
 import { AuthProvider } from "@/context/auth-context"
 import { MaintenanceProvider } from "@/context/maintenance-context"
 import { PasswordProvider } from "@/context/password-context"
 import { MaintenanceBanner } from "@/components/maintenance-banner"
-import "./globals.css"
 import { Suspense } from "react"
+import { LayoutClientWrapper } from "@/components/layout-client-wrapper"
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -67,11 +67,11 @@ export default function RootLayout({
                   </Suspense>
                   <main className="container mx-auto px-4 py-8 flex flex-col items-center transition-all duration-700 flex-grow">
                     <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+                    <LayoutClientWrapper />
                   </main>
                   <Suspense fallback={<div className="py-8 border-t">© {new Date().getFullYear()} Miixu</div>}>
                     <Footer />
                   </Suspense>
-                  <Analytics />
                 </div>
               </PasswordProvider>
             </MaintenanceProvider>
